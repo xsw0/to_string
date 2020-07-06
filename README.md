@@ -90,7 +90,7 @@ TO_STRING::arraySpace = " ";
 TO_STRING::arrayNewline = "\n";
 TO_STRING::arrayIndent = "    ";
 
-TO_STRING::prefix</*other standard library container for example*/>std::vector = "{";    
+TO_STRING::prefix</*other standard library container for example*/std::vector> = "{";    
 TO_STRING::suffix</*other standard library container for example*/std::vector> = "}";    
 TO_STRING::separator</*other standard library container for example*/std::vector> = ","; 
 TO_STRING::space</*other standard library container for example*/std::vector> = " ";     
