@@ -17,7 +17,7 @@
 
 namespace TO_STRING
 {
-    extern std::string emptyString;
+    extern std::string emptyString; // Do not modify this variable
 
     extern size_t CONSOLE_WIDTH;
 

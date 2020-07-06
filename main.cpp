@@ -1,13 +1,11 @@
 #include <iostream>
 #include "to_string.h"
 
-using namespace std;
-
 int main()
 {
-    queue<int> s;
-    s.push(3);
-    s.push(2);
-    cout << to_string(s) << endl;
+    std::vector<std::string> s(10, "abc");
+    std::cout << to_string(s) << std::endl;
+    TO_STRING::CONSOLE_WIDTH = 10;
+    std::cout << to_string(s) << std::endl;
     return 0;
 }
