@@ -1,5 +1,7 @@
+to_string
 
-.DS_Store
+*.DS_Store
+
 *.json
 *.plist
-to_string.dSYM/Contents/Resources/DWARF/to_string
+to_string.dSYM/*
