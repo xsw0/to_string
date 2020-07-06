@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include <array>
+// #include <array>
 // #include <vector>
 // #include <deque>
 #include <forward_list>
@@ -45,7 +45,7 @@ namespace TO_STRING
     template <template <typename...> class>
     int indent;
 
-#define DEFAULT(container)                   \
+#define DECLARE(container)                   \
     template <>                              \
     extern std::string prefix<container>;    \
     template <>                              \
@@ -59,23 +59,23 @@ namespace TO_STRING
     template <>                              \
     extern std::string indent<container>;
 
-    DEFAULT(std::vector);
-    DEFAULT(std::deque);
-    DEFAULT(std::forward_list);
-    DEFAULT(std::list);
-    DEFAULT(std::set);
-    DEFAULT(std::map);
-    DEFAULT(std::multiset);
-    DEFAULT(std::multimap);
-    DEFAULT(std::unordered_set);
-    DEFAULT(std::unordered_map);
-    DEFAULT(std::unordered_multiset);
-    DEFAULT(std::unordered_multimap);
-    DEFAULT(std::stack);
-    DEFAULT(std::queue);
+    DECLARE(std::vector);
+    DECLARE(std::deque);
+    DECLARE(std::forward_list);
+    DECLARE(std::list);
+    DECLARE(std::set);
+    DECLARE(std::map);
+    DECLARE(std::multiset);
+    DECLARE(std::multimap);
+    DECLARE(std::unordered_set);
+    DECLARE(std::unordered_map);
+    DECLARE(std::unordered_multiset);
+    DECLARE(std::unordered_multimap);
+    DECLARE(std::stack);
+    DECLARE(std::queue);
 
-    DEFAULT(std::pair);
-#undef DEFAULT
+    DECLARE(std::pair);
+#undef DECLARE
 } // namespace TO_STRING
 
 inline std::string operator*(const std::string &s, size_t times)
@@ -129,8 +129,14 @@ std::string to_string(const std::pair<T...> &p,
                       std::string &indents = TO_STRING::emptyString);
 
 template <typename T, size_t size>
-std::string to_string(const std::array<T, size> &arr,
+std::string to_string(const std::array<T, size> &,
                       std::string &indents = TO_STRING::emptyString);
+
+template <typename T, typename Container = std::deque<T>>
+std::string to_string(std::stack<T, Container> x, std::string &indents = TO_STRING::emptyString);
+
+template <typename T, typename Container = std::deque<T>>
+std::string to_string(std::queue<T, Container> x, std::string &indents = TO_STRING::emptyString);
 
 template <template <typename...> class T, typename ForwardIt>
 std::string to_string(ForwardIt first,
@@ -162,7 +168,7 @@ std::string to_string(const T &x, std::string &indents)
     return indents + std::to_string(x);
 }
 
-#define ForwardItContainer(container)                                          \
+#define DefForwardItContainer(container)                                       \
     template <typename... T>                                                   \
     std::string to_string(const container<T...> &x, std::string &indents)      \
     {                                                                          \
@@ -172,19 +178,19 @@ std::string to_string(const T &x, std::string &indents)
                                                                    indents);   \
     }
 
-ForwardItContainer(std::vector);
-ForwardItContainer(std::deque);
-ForwardItContainer(std::forward_list);
-ForwardItContainer(std::list);
-ForwardItContainer(std::set);
-ForwardItContainer(std::map);
-ForwardItContainer(std::multiset);
-ForwardItContainer(std::multimap);
-ForwardItContainer(std::unordered_set);
-ForwardItContainer(std::unordered_map);
-ForwardItContainer(std::unordered_multiset);
-ForwardItContainer(std::unordered_multimap);
-#undef ForwardItContainer
+DefForwardItContainer(std::vector);
+DefForwardItContainer(std::deque);
+DefForwardItContainer(std::forward_list);
+DefForwardItContainer(std::list);
+DefForwardItContainer(std::set);
+DefForwardItContainer(std::map);
+DefForwardItContainer(std::multiset);
+DefForwardItContainer(std::multimap);
+DefForwardItContainer(std::unordered_set);
+DefForwardItContainer(std::unordered_map);
+DefForwardItContainer(std::unordered_multiset);
+DefForwardItContainer(std::unordered_multimap);
+#undef DefForwardItContainer
 
 template <typename... T>
 std::string to_string(const std::pair<T...> &p,
@@ -327,6 +333,30 @@ std::string to_string(ForwardIt first,
             return result + indents + suffix<T>;
         }
     }
+}
+
+template <typename T, typename Container>
+std::string to_string(std::stack<T, Container> x, std::string &indents)
+{
+    std::deque<T> container;
+    while (!x.empty())
+    {
+        container.push_front(x.top());
+        x.pop();
+    }
+    return to_string<std::stack, typename std::deque<T>::iterator>(container.begin(), container.end(), indents);
+}
+
+template <typename T, typename Container>
+std::string to_string(std::queue<T, Container> x, std::string &indents)
+{
+    std::deque<T> container;
+    while (!x.empty())
+    {
+        container.push_back(x.front());
+        x.pop();
+    }
+    return to_string<std::queue, typename std::deque<T>::iterator>(container.begin(), container.end(), indents);
 }
 
 #endif

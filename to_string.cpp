@@ -15,7 +15,7 @@ std::string TO_STRING::arraySpace = " ";
 std::string TO_STRING::arrayNewline = "\n";
 std::string TO_STRING::arrayIndent = "    ";
 
-#define DEFAULT(container)                             \
+#define DEFINE(container)                              \
     template <>                                        \
     std::string TO_STRING::prefix<container> = "{";    \
     template <>                                        \
@@ -29,21 +29,20 @@ std::string TO_STRING::arrayIndent = "    ";
     template <>                                        \
     std::string TO_STRING::indent<container> = "    ";
 
-DEFAULT(std::vector);
-DEFAULT(std::deque);
-DEFAULT(std::forward_list);
-DEFAULT(std::list);
-DEFAULT(std::set);
-DEFAULT(std::map);
-DEFAULT(std::multiset);
-DEFAULT(std::multimap);
-DEFAULT(std::unordered_set);
-DEFAULT(std::unordered_map);
-DEFAULT(std::unordered_multiset);
-DEFAULT(std::unordered_multimap);
-DEFAULT(std::stack);
-DEFAULT(std::queue);
+DEFINE(std::vector);
+DEFINE(std::deque);
+DEFINE(std::forward_list);
+DEFINE(std::list);
+DEFINE(std::set);
+DEFINE(std::map);
+DEFINE(std::multiset);
+DEFINE(std::multimap);
+DEFINE(std::unordered_set);
+DEFINE(std::unordered_map);
+DEFINE(std::unordered_multiset);
+DEFINE(std::unordered_multimap);
+DEFINE(std::stack);
+DEFINE(std::queue);
 
-DEFAULT(std::pair);
-#undef DEFAULT
-
+DEFINE(std::pair);
+#undef DEFINE
